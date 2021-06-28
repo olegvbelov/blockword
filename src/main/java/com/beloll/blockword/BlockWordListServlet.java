@@ -1,23 +1,15 @@
 package com.beloll.blockword;
 
 import com.jsoniter.output.JsonStream;
-import com.yandex.ydb.auth.iam.CloudAuthProvider;
-import com.yandex.ydb.core.auth.AuthProvider;
-import com.yandex.ydb.core.grpc.GrpcTransport;
 import com.yandex.ydb.table.Session;
-import com.yandex.ydb.table.TableClient;
 import com.yandex.ydb.table.result.ResultSetReader;
-import com.yandex.ydb.table.rpc.grpc.GrpcTableRpc;
 import com.yandex.ydb.table.transaction.TxControl;
-import yandex.cloud.sdk.auth.provider.CredentialProvider;
-import yandex.cloud.sdk.auth.provider.OauthCredentialProvider;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
