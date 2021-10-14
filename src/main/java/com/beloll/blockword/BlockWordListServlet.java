@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,8 +22,7 @@ public class BlockWordListServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     
         Session session = dbConnector.connect();
-        String database = System.getenv("DATABASE");
-    
+        
         String query = String.format(
                 "\n" +
                         "PRAGMA TablePathPrefix(\"%s\");\n" +
@@ -30,7 +30,7 @@ public class BlockWordListServlet extends HttpServlet {
                         "SELECT\n" +
                         "    word,\n" +
                         "FROM blockwords;",
-                database);
+                dbConnector.getDatabase());
         TxControl txControl = TxControl.serializableRw().setCommitTx(true);
         ResultSetReader result = session.executeDataQuery(query,  txControl)
                 .join()
@@ -39,7 +39,7 @@ public class BlockWordListServlet extends HttpServlet {
     
         List<String> words = new ArrayList<>();
         while (result.next()) {
-            words.add(result.getColumn("word").getUtf8());
+            words.add(result.getColumn("word").getString(Charset.defaultCharset()));
         }
     
         PrintWriter out = resp.getWriter();

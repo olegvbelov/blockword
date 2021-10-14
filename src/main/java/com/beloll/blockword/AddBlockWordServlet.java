@@ -1,5 +1,6 @@
 package com.beloll.blockword;
 
+import com.google.protobuf.ByteString;
 import com.yandex.ydb.table.Session;
 import com.yandex.ydb.table.query.DataQuery;
 import com.yandex.ydb.table.query.DataQueryResult;
@@ -23,14 +24,14 @@ public class AddBlockWordServlet extends HttpServlet {
         Session session = dbConnector.connect();
     
         DataQuery query = session.prepareDataQuery(
-                "DECLARE $word AS Utf8;" +
+                "DECLARE $word AS String``;" +
                         "UPSERT INTO blockwords (word) VALUES\n" +
                         "($word);")
                 .join()
                 .expect("query failed");
     
         Params params = query.newParams()
-                .put("$word", PrimitiveValue.utf8(word));
+                .put("$word", PrimitiveValue.string(ByteString.copyFromUtf8(word)));
         DataQueryResult result = query.execute(TxControl.serializableRw().setCommitTx(true), params)
                 .join()
                 .expect("query failed");

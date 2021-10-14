@@ -13,13 +13,18 @@ import java.time.Duration;
 
 public class DBConnector {
     
+    private String database;
+    private String oauthToken;
+    private String endpoint;
+    
     public DBConnector() {
+    
+        this.database = System.getenv("DATABASE");
+        this.oauthToken = System.getenv("YC_TOKEN");
+        this.endpoint = System.getenv("ENDPOINT");
     }
     
     public Session connect() {
-        String database = System.getenv("DATABASE");
-        String oauthToken = System.getenv("YC_TOKEN");
-        String endpoint = System.getenv("ENDPOINT");
     
         CredentialProvider credentialProvider = OauthCredentialProvider.builder()
                 .oauth(oauthToken)
@@ -41,5 +46,9 @@ public class DBConnector {
                 .join()
                 .expect("cannot create session");
         return session;
+    }
+    
+    public String getDatabase() {
+        return database;
     }
 }
